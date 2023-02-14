@@ -9,14 +9,14 @@ const {
   create,
   findToken,
   verifyingEmail,
-} = require("../../model/auth/seller");
+} = require("../../model/auth/customer");
 const { generateToken, generateRefershToken } = require("../../helper/jwt");
 const jwt = require("jsonwebtoken");
 
-const authSeller = {
+const authCustomer = {
   register: async (req, res, next) => {
     try {
-      const { name, email, phoneNumber, storeName, password } = req.body;
+      const { name, email, password } = req.body;
       const seller = await findEmail(email);
       if (seller.rowCount > 0)
         throw next(new createError(401, "Email already used!"));
@@ -27,13 +27,11 @@ const authSeller = {
         id: uuidV4(),
         name,
         email,
-        phoneNumber,
-        storeName,
         passwordHash,
         isverified,
         token,
       };
-      sendEmail.sendConfirmationEmail(email, token);
+      sendEmail.sendConfirmationEmailCustomer(email, token);
       create(data)
         .then((result) => response(res, result.rows, 200, "Register succses"))
         .catch((error) => next(new createError(error)));
@@ -64,20 +62,20 @@ const authSeller = {
     try {
       const { email, password } = req.body;
       const {
-        rows: [seller],
+        rows: [customer],
       } = await findEmail(email);
-      if (!seller) throw next(new createError(400, "Email is invalid"));
-      if (seller.isverified === false)
+      if (!customer) throw next(new createError(400, "Email is invalid"));
+      if (customer.isverified === false)
         throw next(new createError(400, "account not verified by email"));
-      const isPassword = bcrypt.compareSync(password, seller.password);
+      const isPassword = bcrypt.compareSync(password, customer.password);
       if (!isPassword) throw next(new createError(400, "Password is in valid"));
-      delete seller.password;
+      delete customer.password;
       const payload = {
-        id: seller.id,
+        id: customer.id,
       };
-      seller.token = generateToken(payload);
-      seller.refreshToken = generateRefershToken(payload);
-      response(res, seller, 200, "login success");
+      customer.token = generateToken(payload);
+      customer.refreshToken = generateRefershToken(payload);
+      response(res, customer, 200, "login success");
     } catch (error) {
       next(error);
     }
@@ -96,4 +94,4 @@ const authSeller = {
   },
 };
 
-module.exports = authSeller;
+module.exports = authCustomer;

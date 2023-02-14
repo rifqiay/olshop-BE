@@ -12,6 +12,11 @@ CREATE TABLE seller(
     token VARCHAR(255)
 );
 
+CREATE TABLE category(
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(50)
+);
+
 CREATE TABLE product(
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255),
@@ -27,14 +32,24 @@ CREATE TABLE product(
     on delete CASCADE
 );
 
+ALTER TABLE product
+ADD categoryId VARCHAR(255),
+ADD FOREIGN KEY (categoryId) REFERENCES category(id);
+
+
+
 CREATE TABLE photo(
     id VARCHAR(255) PRIMARY KEY,
-    photo VARCHAR,
+    cover VARCHAR,
+    photo1 VARCHAR,
+    photo2 VARCHAR,
+    photo3 VARCHAR,
+    photo4 VARCHAR,
+    photo5 VARCHAR,
     productId VARCHAR(255),
     Foreign Key (productId) REFERENCES product(id)
     on delete CASCADE
 );
-
 
 
 CREATE TABLE customer(
