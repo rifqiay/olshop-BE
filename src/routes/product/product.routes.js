@@ -1,8 +1,21 @@
 const express = require("express");
-const { addProduct } = require("../../controller/product/product");
+const {
+  addProduct,
+  getById,
+  edit,
+  newProduct,
+  allProduct,
+  remove,
+} = require("../../controller/product/product");
 const { upload } = require("../../middleware/upload");
 const router = express.Router();
 
-router.post("/", upload.single("cover"), upload.array("photo", 5), addProduct);
+router
+  .post("/", upload.array("photo", 6), addProduct)
+  .get("/", allProduct)
+  .get("/new", newProduct)
+  .delete("/delete/:id", remove)
+  .get("/:id", getById)
+  .put("/edit/:id", upload.array("photo", 6), edit);
 
 module.exports = router;

@@ -26,28 +26,18 @@ CREATE TABLE product(
     size VARCHAR(255),
     condition VARCHAR(10),
     description TEXT,
-    createAt TIMESTAMP without TIME zone DEFAULT now(),
-    sellerId VARCHAR(255),
-    Foreign Key (sellerId) REFERENCES seller(id)
-    on delete CASCADE
-);
-
-ALTER TABLE product
-ADD categoryId VARCHAR(255),
-ADD FOREIGN KEY (categoryId) REFERENCES category(id);
-
-
-
-CREATE TABLE photo(
-    id VARCHAR(255) PRIMARY KEY,
-    cover VARCHAR,
+    photo0 VARCHAR,
     photo1 VARCHAR,
     photo2 VARCHAR,
     photo3 VARCHAR,
     photo4 VARCHAR,
     photo5 VARCHAR,
-    productId VARCHAR(255),
-    Foreign Key (productId) REFERENCES product(id)
+    createAt TIMESTAMP without TIME zone DEFAULT now(),
+    sellerId VARCHAR(255),
+    Foreign Key (sellerId) REFERENCES seller(id)
+    on delete CASCADE,
+    categoryId VARCHAR(255),
+    Foreign Key (categoryId) REFERENCES category(id)
     on delete CASCADE
 );
 

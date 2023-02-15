@@ -10,22 +10,82 @@ const createProduct = (data) => {
     size,
     condition,
     description,
+    photo0,
+    photo1,
+    photo2,
+    photo3,
+    photo4,
+    photo5,
     sellerId,
     categoryId,
   } = data;
   return db.query(
-    `INSERT INTO product( id, name, price, stock, color, size, condition, description, sellerid, categoryid ) VALUES( '${id}', '${name}', ${price}, ${stock}, '${color}', '${size}', '${condition}', '${description}', '${sellerId}', '${categoryId}' )`
+    `INSERT INTO product( id, name, price, stock, color, size, condition, description, photo0, photo1, photo2, photo3, photo4, photo5, sellerid, categoryid) VALUES( '${id}', '${name}', ${price}, ${stock}, '${color}', '${size}', '${condition}', '${description}', '${photo0}', '${photo1}', '${photo2}', '${photo3}', '${photo4}', '${photo5}', '${sellerId}', '${categoryId}')`
   );
 };
 
-const addPhoto = (data) => {
-  const { id, cover, photo1, photo2, photo3, photo4, photo5, productId } = data;
+const getOne = (id) => {
+  console.log(id);
+  return db.query(`SELECT product.*, seller.storeName 
+  FROM product 
+  LEFT JOIN seller ON product.sellerid = seller.id 
+  WHERE product.id='${id}'`);
+};
+
+const update = (data) => {
+  const {
+    name,
+    price,
+    stock,
+    color,
+    size,
+    condition,
+    description,
+    photo0,
+    photo1,
+    photo2,
+    photo3,
+    photo4,
+    photo5,
+    categoryId,
+    id,
+  } = data;
   return db.query(
-    `INSERT INTO photo( id, cover, photo1, photo2, photo3, photo4, photo5, productid ) VALUES( '${id}', '${cover}', '${photo1}', '${photo2}', '${photo3}', '${photo4}', '${photo5}', '${productId}' )`
+    `UPDATE product SET name='${name}', price=${price}, stock=${stock}, color='${color}', size='${size}', condition='${condition}', description='${description}', photo0='${photo0}', photo1='${photo1}', photo2='${photo2}', photo3='${photo3}', photo4='${photo4}', photo5='${photo5}', categoryid='${categoryId}' WHERE  id='${id}'`
   );
+};
+
+const getNewProduct = ({ limit, offset }) => {
+  return db.query(`SELECT product.*, product.id as id_product , seller.id as id_seller
+  FROM product
+  LEFT JOIN seller ON product.sellerid = seller.id
+  ORDER BY product.createat DESC
+  LIMIT ${limit} OFFSET ${offset}`);
+};
+
+const getAllProduct = ({ search, sort, orderBy, limit, offset }) => {
+  return db.query(`SELECT product.*, product.id as id_product, seller.id as id_seller
+  FROM product
+  LEFT JOIN seller ON product.sellerid = seller.id
+  WHERE product.name ILIKE '%${search}%'
+  ORDER BY product.${orderBy} ${sort}
+  LIMIT ${limit} OFFSET ${offset}`);
+};
+
+const destroy = (id) => {
+  return db.query(`DELETE FROM product WHERE id='${id}'`);
+};
+
+const countData = () => {
+  return db.query("SELECT COUNT(*) FROM product");
 };
 
 module.exports = {
   createProduct,
-  addPhoto,
+  getOne,
+  update,
+  getNewProduct,
+  getAllProduct,
+  destroy,
+  countData,
 };

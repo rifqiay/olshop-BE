@@ -22,14 +22,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploadToCloudinary = async (locaFilePath) => {
+const uploadToCloudinary = async (locaFilePath, originalname) => {
   // locaFilePath: path of image which was just
   // uploaded to "uploads" folder
 
-  var mainFolderName = "main";
-  // filePathOnCloudinary: path of image we want
-  // to set when it is uploaded to cloudinary
-  var filePathOnCloudinary = mainFolderName + "/" + locaFilePath;
+  const mainFolderName = "main";
+  const filePathOnCloudinary = mainFolderName + "/" + originalname;
 
   return cloudinary.uploader
     .upload(locaFilePath, { public_id: filePathOnCloudinary })
@@ -41,7 +39,6 @@ const uploadToCloudinary = async (locaFilePath) => {
       fs.unlinkSync(locaFilePath);
 
       return {
-        message: "Success",
         url: result.url,
         id: result.public_id,
       };
@@ -78,12 +75,7 @@ const deleteImage = (public_id) => {
         new createError(500, "Failed to delete image from Cloudinary")
       );
     }
-    console.log("Image deleted from Cloudinary");
-
-    // res.status(200).json({
-    //   message: "Image deleted from Cloudinary",
-    //   result,
-    // });
+    // console.log("Image deleted from Cloudinary");
   });
 };
 
