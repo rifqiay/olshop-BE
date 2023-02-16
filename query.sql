@@ -75,11 +75,7 @@ ADD FOREIGN KEY (customerId) REFERENCES customer(id) ON DELETE CASCADE;
 
 CREATE TABLE delivery(
     id VARCHAR(255) PRIMARY KEY,
-    deliveryDate DATE,
-    deliveryStatus VARCHAR(50),
-    customerId VARCHAR(255),
-    Foreign Key (customerId) REFERENCES customer(id)
-    on delete CASCADE
+    deliveryStatus VARCHAR(50)
 );
 
 CREATE TABLE payment(
@@ -99,4 +95,15 @@ CREATE TABLE cart(
     Foreign Key (customerId) REFERENCES customer(id),
     Foreign Key (paymentId) REFERENCES payment(id),
     Foreign Key (deliveryId) REFERENCES delivery(id)
+);
+
+CREATE TABLE orders (
+  id VARCHAR(255) PRIMARY KEY,
+  orderStatus VARCHAR(20),
+  cartId VARCHAR(255),
+  paymentId VARCHAR(255),
+  customerId VARCHAR(255),
+  deliveryId VARCHAR(225),
+  totalPrice NUMERIC(10, 2),
+  products JSONB
 );
