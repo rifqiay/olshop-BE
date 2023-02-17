@@ -8,6 +8,7 @@ const categories = require("./categories/categories.routes");
 const product = require("./product/product.routes");
 const address = require("./address/address.routes");
 const cart = require("./cart/cart.routes");
+const orders = require("./orders/orders.routes");
 
 router
   .use("/auth/seller", authSeller)
@@ -17,6 +18,7 @@ router
   .use("/categories", categories)
   .use("/product", product)
   .use("/address", address)
-  .use("/cart", cart);
+  .use("/cart", cart)
+  .use("/orders", orders);
 
 module.exports = router;

@@ -182,10 +182,7 @@ const productController = {
         limit,
         offset,
       });
-      const {
-        rows: [count],
-      } = await countData();
-      const totalData = parseInt(count.count);
+      const totalData = result.rowCount;
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
         currentPage: page,

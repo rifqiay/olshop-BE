@@ -14,7 +14,8 @@ CREATE TABLE seller(
 
 CREATE TABLE category(
     id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(50)
+    name VARCHAR(50),
+    photo VARCHAR(255)
 );
 
 CREATE TABLE product(
@@ -74,8 +75,9 @@ ALTER TABLE address
 ADD FOREIGN KEY (customerId) REFERENCES customer(id) ON DELETE CASCADE;
 
 CREATE TABLE delivery(
-    id VARCHAR(255) PRIMARY KEY,
-    deliveryStatus VARCHAR(50)
+  id VARCHAR(255) PRIMARY KEY,
+  deliverystatus VARCHAR(100),
+  orderId VARCHAR(255)
 );
 
 CREATE TABLE payment(
@@ -89,21 +91,13 @@ CREATE TABLE cart(
     productId VARCHAR(255),
     customerId VARCHAR(255),
     quantity INT,
-    paymentId VARCHAR(255),
-    deliveryId VARCHAR(255),
     Foreign Key (productId) REFERENCES product(id),
-    Foreign Key (customerId) REFERENCES customer(id),
-    Foreign Key (paymentId) REFERENCES payment(id),
-    Foreign Key (deliveryId) REFERENCES delivery(id)
+    Foreign Key (customerId) REFERENCES customer(id)
 );
 
 CREATE TABLE orders (
   id VARCHAR(255) PRIMARY KEY,
-  orderStatus VARCHAR(20),
-  cartId VARCHAR(255),
-  paymentId VARCHAR(255),
-  customerId VARCHAR(255),
-  deliveryId VARCHAR(225),
-  totalPrice NUMERIC(10, 2),
-  products JSONB
+  customerId VARCHAR(255) NOT NULL,
+  totalPrice NUMERIC(10, 2) NOT NULL,
+  products JSONB NOT NULL
 );
