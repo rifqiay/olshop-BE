@@ -56,17 +56,17 @@ const update = (data) => {
 };
 
 const getNewProduct = ({ limit, offset }) => {
-  return db.query(`SELECT product.*, product.id as id_product , seller.id as id_seller
+  return db.query(`SELECT product.id as id_product, product.name, product.price, product.photo0, seller.storename
   FROM product
-  LEFT JOIN seller ON product.sellerid = seller.id
+  JOIN seller ON product.sellerid = seller.id
   ORDER BY product.createat DESC
   LIMIT ${limit} OFFSET ${offset}`);
 };
 
 const getAllProduct = ({ search, sort, orderBy, limit, offset }) => {
-  return db.query(`SELECT product.*, product.id as id_product, seller.id as id_seller
+  return db.query(`SELECT product.id as id_product, product.name, product.price, product.photo0, seller.storename
   FROM product
-  LEFT JOIN seller ON product.sellerid = seller.id
+  JOIN seller ON product.sellerid = seller.id
   WHERE product.name ILIKE '%${search}%'
   ORDER BY product.${orderBy} ${sort}
   LIMIT ${limit} OFFSET ${offset}`);

@@ -1,8 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const mainRoutes = require("./src/routes/index.routes");
 
+app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());

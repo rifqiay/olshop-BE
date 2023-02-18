@@ -171,7 +171,7 @@ const productController = {
     try {
       const search = req.query.search || "";
       const orderBy = req.query.orderBy || "createat";
-      const sort = req.query.sort || "DESC";
+      const sort = req.query.sort || "ASC";
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || 10;
       const offset = (page - 1) * limit;
