@@ -23,6 +23,7 @@ const authSeller = {
       const passwordHash = bcrypt.hashSync(password);
       const isverified = false;
       const token = crypto.randomBytes(16).toString("hex");
+      const role = "seller";
       const data = {
         id: uuidV4(),
         name,
@@ -32,6 +33,7 @@ const authSeller = {
         passwordHash,
         isverified,
         token,
+        role,
       };
       sendEmail.sendConfirmationEmail(email, token);
       create(data)

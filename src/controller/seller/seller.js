@@ -9,8 +9,7 @@ const sellerController = {
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const { name, email, phoneNumber, storeName, storeDescription } =
-        req.body;
+      const { email, phoneNumber, storeName, storeDescription } = req.body;
       const seller = await getProfile(id);
       const isPhoto = seller.rows[0].photo;
       if (isPhoto) {
@@ -18,24 +17,35 @@ const sellerController = {
         deleteImage(public_id);
       }
 
-      const locaFilePath = req.file.path;
-      const result = await uploadToCloudinary(locaFilePath);
+      const locaFilePath = req.file?.path;
+      let photos;
+      if (locaFilePath) {
+        photos = await uploadToCloudinary(locaFilePath);
+      }
 
-      if (!result) throw new createError(400, "failed to upload image");
       const data = {
         id,
-        name,
         email,
         phoneNumber,
         storeName,
-        photo: `${result.id},${result.url}`,
+        photo: !photos ? isPhoto : `${photos.id},${photos.url}`,
         storeDescription,
       };
       edit(data)
         .then((result) =>
-          response(res, result.rows, 200, "Edit profile succes")
+          response(res, result.rows, 200, "Edit profile succes", "succsess")
         )
         .catch((error) => next(new createError(error)));
+    } catch (error) {
+      next(error);
+    }
+  },
+  getSellerById: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = await getProfile(id);
+      delete result.rows[0].password;
+      response(res, result.rows, 200, "Edit profile succes", "succsess");
     } catch (error) {
       next(error);
     }

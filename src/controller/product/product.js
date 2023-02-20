@@ -29,14 +29,18 @@ const productController = {
         categoryId,
       } = req.body;
       let photoList = [];
-      for (var i = 0; i < req.files.length; i++) {
-        let originalname = req.files[i].originalname;
-        originalname = crypto.randomBytes(5).toString("hex");
-        let locaFilePath = req.files[i].path;
+      // const photos = req.files.map((file) => file);
+      const photos = req.files;
 
-        const resultList = await uploadToCloudinary(locaFilePath, originalname);
-        photoList.push(`${resultList.id},${resultList.url}`);
-      }
+      console.log(photos);
+      // for (var i = 0; i < req.files.length; i++) {
+      //   let originalname = req.files[i].originalname;
+      //   originalname = crypto.randomBytes(5).toString("hex");
+      //   let locaFilePath = req.files[i].path;
+
+      //   // const resultList = await uploadToCloudinary(locaFilePath, originalname);
+      //   // photoList.push(`${resultList.id},${resultList.url}`);
+      // }
 
       // add product
       const data = {
@@ -57,9 +61,9 @@ const productController = {
         sellerId,
         categoryId,
       };
-      console.log(data);
-      const result = await createProduct(data);
-      response(res, result.rows, 200, "Add product success", "success");
+      // console.log(data);
+      // const result = await createProduct(data);
+      // response(res, result.rows, 200, "Add product success", "success");
     } catch (error) {
       next(error);
     }

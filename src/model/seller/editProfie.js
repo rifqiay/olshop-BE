@@ -1,10 +1,9 @@
 const db = require("../../config/db");
 
 const edit = (data) => {
-  const { id, name, email, phoneNumber, storeName, photo, storeDescription } =
-    data;
+  const { id, email, phoneNumber, storeName, photo, storeDescription } = data;
   return db.query(
-    `UPDATE seller SET name='${name}', email='${email}', phonenumber='${phoneNumber}', storename='${storeName}', photo='${photo}', storedescription='${storeDescription}' WHERE id='${id}'`
+    `UPDATE seller SET email='${email}', phonenumber='${phoneNumber}', storename='${storeName}', photo='${photo}', storedescription='${storeDescription}' WHERE id='${id}'`
   );
 };
 

@@ -16,10 +16,12 @@ const customerController = {
         deleteImage(public_id);
       }
 
-      const locaFilePath = req.file.path;
-      const result = await uploadToCloudinary(locaFilePath);
+      const locaFilePath = req.file?.path;
+      let result;
+      if (locaFilePath) {
+        result = await uploadToCloudinary(locaFilePath);
+      }
 
-      if (!result) throw new createError(400, "failed to upload image");
       const data = {
         id,
         name,
@@ -27,13 +29,22 @@ const customerController = {
         phoneNumber,
         gender,
         birth,
-        photo: `${result.id},${result.url}`,
+        photo: !result ? isPhoto : `${result.id},${result.url}`,
       };
       edit(data)
         .then((result) =>
-          response(res, result.rows, 200, "Edit profile succes")
+          response(res, result.rows, 200, "Edit profile succes", "success")
         )
         .catch((error) => next(new createError(error)));
+    } catch (error) {
+      next(error);
+    }
+  },
+  getCustomerById: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = await getProfile(id);
+      response(res, result.rows, 200, "Get profile succes", "success");
     } catch (error) {
       next(error);
     }

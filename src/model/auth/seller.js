@@ -10,9 +10,10 @@ const create = (data) => {
     passwordHash,
     isverified,
     token,
+    role,
   } = data;
   return db.query(
-    `INSERT INTO seller(id, name, email, phonenumber, storename, password, isverified, token) VALUES('${id}', '${name}', '${email}', '${phoneNumber}', '${storeName}', '${passwordHash}', '${isverified}', '${token}')`
+    `INSERT INTO seller(id, name, email, phonenumber, storename, password, isverified, token, role) VALUES('${id}', '${name}', '${email}', '${phoneNumber}', '${storeName}', '${passwordHash}', '${isverified}', '${token}', '${role}')`
   );
 };
 

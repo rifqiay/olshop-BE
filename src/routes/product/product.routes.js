@@ -11,7 +11,7 @@ const { upload } = require("../../middleware/upload");
 const router = express.Router();
 
 router
-  .post("/", upload.array("photo", 6), addProduct)
+  .post("/", upload.array("photo"), addProduct)
   .get("/", allProduct)
   .get("/new", newProduct)
   .delete("/delete/:id", remove)

@@ -9,7 +9,8 @@ CREATE TABLE seller(
     photo VARCHAR,
     storeDescription TEXT,
     isVerified BOOLEAN,
-    token VARCHAR(255)
+    token VARCHAR(255),
+    role VARCHAR(10)
 );
 
 CREATE TABLE category(
@@ -54,7 +55,8 @@ CREATE TABLE customer(
     photo VARCHAR,
     isVerified BOOLEAN,
     token VARCHAR(255),
-    addressId VARCHAR(255)
+    addressId VARCHAR(255),
+    role VARCHAR(10)
 );
 
 CREATE TABLE address(
