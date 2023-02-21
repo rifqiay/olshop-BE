@@ -80,6 +80,12 @@ const countData = () => {
   return db.query("SELECT COUNT(*) FROM product");
 };
 
+const getByIdSeller = (sellerId) => {
+  return db.query(
+    `SELECT product.id, product.name, product.price, product.stock FROM product WHERE sellerid='${sellerId}'`
+  );
+};
+
 module.exports = {
   createProduct,
   getOne,
@@ -88,4 +94,5 @@ module.exports = {
   getAllProduct,
   destroy,
   countData,
+  getByIdSeller,
 };

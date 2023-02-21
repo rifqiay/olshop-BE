@@ -9,6 +9,7 @@ const {
   getNewProduct,
   getAllProduct,
   destroy,
+  getByIdSeller,
 } = require("../../model/product/product");
 const crypto = require("crypto");
 const createError = require("http-errors");
@@ -29,18 +30,16 @@ const productController = {
         categoryId,
       } = req.body;
       let photoList = [];
-      // const photos = req.files.map((file) => file);
-      const photos = req.files;
+      // const photos = req.files.map((file) => file.filename);
+      // console.log(photos);
+      for (var i = 0; i < req.files.length; i++) {
+        let originalname = req.files[i].originalname;
+        originalname = crypto.randomBytes(5).toString("hex");
+        let locaFilePath = req.files[i].path;
 
-      console.log(photos);
-      // for (var i = 0; i < req.files.length; i++) {
-      //   let originalname = req.files[i].originalname;
-      //   originalname = crypto.randomBytes(5).toString("hex");
-      //   let locaFilePath = req.files[i].path;
-
-      //   // const resultList = await uploadToCloudinary(locaFilePath, originalname);
-      //   // photoList.push(`${resultList.id},${resultList.url}`);
-      // }
+        const resultList = await uploadToCloudinary(locaFilePath, originalname);
+        photoList.push(`${resultList.id},${resultList.url}`);
+      }
 
       // add product
       const data = {
@@ -62,8 +61,8 @@ const productController = {
         categoryId,
       };
       // console.log(data);
-      // const result = await createProduct(data);
-      // response(res, result.rows, 200, "Add product success", "success");
+      const result = await createProduct(data);
+      response(res, result.rows, 200, "Add product success", "success");
     } catch (error) {
       next(error);
     }
@@ -223,6 +222,15 @@ const productController = {
       const result = destroy(id);
       if (!result) throw next(new createError(400));
       response(res, result.rows, 200, "Delete product success", "success");
+    } catch (error) {
+      next(error);
+    }
+  },
+  getProductByIdSeller: async (req, res, next) => {
+    try {
+      const { sellerId } = req.params;
+      const result = await getByIdSeller(sellerId);
+      response(res, result.rows, 200, "Get product success", "success");
     } catch (error) {
       next(error);
     }

@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mainRoutes = require("./src/routes/index.routes");
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.static(__dirname + "/public"));
@@ -20,6 +21,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3001, () => {
-  console.log("running on port 3001");
+app.listen(port, () => {
+  console.log(`running on port ${port}`);
 });

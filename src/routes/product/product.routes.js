@@ -6,6 +6,7 @@ const {
   newProduct,
   allProduct,
   remove,
+  getProductByIdSeller,
 } = require("../../controller/product/product");
 const { upload } = require("../../middleware/upload");
 const router = express.Router();
@@ -16,6 +17,7 @@ router
   .get("/new", newProduct)
   .delete("/delete/:id", remove)
   .get("/:id", getById)
+  .get("/seller/:sellerId", getProductByIdSeller)
   .put("/edit/:id", upload.array("photo", 6), edit);
 
 module.exports = router;
