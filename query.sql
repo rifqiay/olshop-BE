@@ -68,6 +68,7 @@ CREATE TABLE address(
     city VARCHAR(50),
     posCode VARCHAR(10),
     customerId VARCHAR(255)
+    primaryAddress BOOLEAN
 );
 
 ALTER TABLE customer

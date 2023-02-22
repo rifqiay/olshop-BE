@@ -22,7 +22,31 @@ const setPrimaryAddress = ({ customerId, addressId }) => {
   );
 };
 
+const getAllAddress = (customerId) => {
+  return db.query(`SELECT * FROM address WHERE customerid='${customerId}'`);
+};
+
+const setNullPrimaryAddress = (customerId) => {
+  return db.query(
+    `UPDATE address SET primaryaddress=null WHERE customerid='${customerId}'`
+  );
+};
+
+const setTruePrimaryAddress = (id) => {
+  return db.query(`UPDATE address SET primaryaddress=true WHERE id='${id}'`);
+};
+
+const getPrimaryAddress = (customerId) => {
+  return db.query(
+    `SELECT * FROM address WHERE primaryaddress=true AND customerid='${customerId}'`
+  );
+};
+
 module.exports = {
   addAddress,
   setPrimaryAddress,
+  getAllAddress,
+  setNullPrimaryAddress,
+  setTruePrimaryAddress,
+  getPrimaryAddress,
 };

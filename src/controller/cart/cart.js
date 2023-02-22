@@ -12,6 +12,7 @@ const cartController = {
   addToCart: async (req, res, next) => {
     try {
       const { productId, customerId, quantity } = req.body;
+      // console.log(productId, customerId, quantity);
       const result = await add({
         id: uuidV4(),
         productId,

@@ -71,7 +71,7 @@ const productController = {
     const { id } = req.params;
     getOne(id)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         response(res, result.rows, 200, "Get product success", "success");
       })
       .catch((error) => next(new createError(error)));
