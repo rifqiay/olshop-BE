@@ -25,7 +25,6 @@ const createProduct = (data) => {
 };
 
 const getOne = (id) => {
-  console.log(id);
   return db.query(`SELECT product.*, seller.storeName 
   FROM product 
   LEFT JOIN seller ON product.sellerid = seller.id 
@@ -76,14 +75,20 @@ const destroy = (id) => {
   return db.query(`DELETE FROM product WHERE id='${id}'`);
 };
 
-const countData = () => {
-  return db.query("SELECT COUNT(*) FROM product");
+const countData = (search) => {
+  return db.query(
+    `SELECT COUNT(*) FROM product WHERE name ILIKE '%${search}%'`
+  );
 };
 
-const getByIdSeller = (sellerId) => {
+const getByIdSeller = ({ sellerId, search }) => {
   return db.query(
-    `SELECT product.id, product.name, product.price, product.stock FROM product WHERE sellerid='${sellerId}'`
+    ` SELECT * FROM product WHERE sellerid='${sellerId}' OR name ILIKE '%${search}%'`
   );
+};
+
+const getByCategoryId = (id) => {
+  return db.query(`SELECT * FROM product WHERE categoryid='${id}'`);
 };
 
 module.exports = {
@@ -95,4 +100,5 @@ module.exports = {
   destroy,
   countData,
   getByIdSeller,
+  getByCategoryId,
 };

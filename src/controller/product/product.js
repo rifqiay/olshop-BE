@@ -10,6 +10,7 @@ const {
   getAllProduct,
   destroy,
   getByIdSeller,
+  getByCategoryId,
 } = require("../../model/product/product");
 const crypto = require("crypto");
 const createError = require("http-errors");
@@ -104,7 +105,7 @@ const productController = {
       let photoList = [];
       let resultList;
 
-      for (var i = 0; i < req.files.length; i++) {
+      for (let i = 0; i < req.files.length; i++) {
         let originalname = req.files[i].originalname;
         originalname = crypto.randomBytes(5).toString("hex");
         let locaFilePath = req.files[i].path;
@@ -113,30 +114,50 @@ const productController = {
         photoList.push(`${resultList.id},${resultList.url}`);
       }
 
-      if (!resultList) throw new createError(400, "failed to upload image");
+      // if (!resultList) throw new createError(400, "failed to upload image");
 
-      const data = {
-        name,
-        price,
-        stock,
-        color,
-        size,
-        condition,
-        description,
-        photo0: photoList[0],
-        photo1: photoList[1],
-        photo2: photoList[2],
-        photo3: photoList[3],
-        photo4: photoList[4],
-        photo5: photoList[5],
-        categoryId,
-        id,
-      };
-      update(data)
-        .then((result) =>
-          response(res, result.rows, 200, "Edit product success", "success")
-        )
-        .catch((error) => next(new createError(error)));
+      if (photoList.length === 0) {
+        const data = {
+          name,
+          price,
+          stock,
+          color,
+          size,
+          condition,
+          description,
+          categoryId,
+          id,
+        };
+        update(data)
+          .then((result) =>
+            response(res, result.rows, 200, "Edit product success", "success")
+          )
+          .catch((error) => next(new createError(error)));
+      } else {
+        const data = {
+          name,
+          price,
+          stock,
+          color,
+          size,
+          condition,
+          description,
+          photo0: photoList[0],
+          photo1: photoList[1],
+          photo2: photoList[2],
+          photo3: photoList[3],
+          photo4: photoList[4],
+          photo5: photoList[5],
+          categoryId,
+          id,
+        };
+        // console.log("data ", data);
+        update(data)
+          .then((result) =>
+            response(res, result.rows, 200, "Edit product success", "success")
+          )
+          .catch((error) => next(new createError(error)));
+      }
     } catch (error) {
       next(error);
     }
@@ -185,7 +206,10 @@ const productController = {
         limit,
         offset,
       });
-      const totalData = result.rowCount;
+      const {
+        rows: [count],
+      } = await countData(search);
+      const totalData = parseInt(count.count);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
         currentPage: page,
@@ -197,7 +221,7 @@ const productController = {
         res,
         result.rows,
         200,
-        "Get new product success",
+        "Get product success",
         "success",
         pagination
       );
@@ -229,7 +253,17 @@ const productController = {
   getProductByIdSeller: async (req, res, next) => {
     try {
       const { sellerId } = req.params;
-      const result = await getByIdSeller(sellerId);
+      const { search } = req.query || "";
+      const result = await getByIdSeller({ sellerId, search });
+      response(res, result.rows, 200, "Get product success", "success");
+    } catch (error) {
+      next(error);
+    }
+  },
+  recentProduct: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = await getByCategoryId(id);
       response(res, result.rows, 200, "Get product success", "success");
     } catch (error) {
       next(error);

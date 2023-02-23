@@ -21,7 +21,6 @@ const getBuyProducts = ({ customerId, deliverystatus }) => {
   return db.query(`SELECT orders.*, delivery.deliverystatus
     FROM orders 
     LEFT JOIN delivery ON orders.id = delivery.orderid
-    
     WHERE customerid='${customerId}' AND delivery.deliverystatus='${deliverystatus}'`);
 };
 
