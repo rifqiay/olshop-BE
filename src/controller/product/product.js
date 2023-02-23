@@ -95,69 +95,53 @@ const productController = {
       const { photo0, photo1, photo2, photo3, photo4, photo5 } =
         isProduct.rows[0];
       const checkPhoto = [photo0, photo1, photo2, photo3, photo4, photo5];
+      const oldPhoto = [];
       checkPhoto.forEach((photo) => {
         if (photo) {
+          oldPhoto.push(photo);
           const public_id = extractPublicId(photo);
           deleteImage(public_id);
         }
       });
 
       let photoList = [];
-      let resultList;
+      const foto = req.files;
+      if (foto.length !== 0) {
+        for (let i = 0; i < req.files.length; i++) {
+          let originalname = req.files[i].originalname;
+          originalname = crypto.randomBytes(5).toString("hex");
+          let locaFilePath = req.files[i].path;
 
-      for (let i = 0; i < req.files.length; i++) {
-        let originalname = req.files[i].originalname;
-        originalname = crypto.randomBytes(5).toString("hex");
-        let locaFilePath = req.files[i].path;
-
-        const resultList = await uploadToCloudinary(locaFilePath, originalname);
-        photoList.push(`${resultList.id},${resultList.url}`);
+          const resultList = await uploadToCloudinary(
+            locaFilePath,
+            originalname
+          );
+          photoList.push(`${resultList.id},${resultList.url}`);
+        }
       }
 
-      // if (!resultList) throw new createError(400, "failed to upload image");
-
-      if (photoList.length === 0) {
-        const data = {
-          name,
-          price,
-          stock,
-          color,
-          size,
-          condition,
-          description,
-          categoryId,
-          id,
-        };
-        update(data)
-          .then((result) =>
-            response(res, result.rows, 200, "Edit product success", "success")
-          )
-          .catch((error) => next(new createError(error)));
-      } else {
-        const data = {
-          name,
-          price,
-          stock,
-          color,
-          size,
-          condition,
-          description,
-          photo0: photoList[0],
-          photo1: photoList[1],
-          photo2: photoList[2],
-          photo3: photoList[3],
-          photo4: photoList[4],
-          photo5: photoList[5],
-          categoryId,
-          id,
-        };
-        // console.log("data ", data);
-        update(data)
-          .then((result) =>
-            response(res, result.rows, 200, "Edit product success", "success")
-          )
-          .catch((error) => next(new createError(error)));
-      }
+      const data = {
+        name,
+        price,
+        stock,
+        color,
+        size,
+        condition,
+        description,
+        photo0: foto.length === 0 ? oldPhoto[0] : photoList[0],
+        photo1: foto.length === 0 ? oldPhoto[1] : photoList[1],
+        photo2: foto.length === 0 ? oldPhoto[2] : photoList[2],
+        photo3: foto.length === 0 ? oldPhoto[3] : photoList[3],
+        photo4: foto.length === 0 ? oldPhoto[4] : photoList[4],
+        photo5: foto.length === 0 ? oldPhoto[5] : photoList[5],
+        categoryId,
+        id,
+      };
+      update(data)
+        .then((result) =>
+          response(res, result.rows, 200, "Edit product success", "success")
+        )
+        .catch((error) => next(new createError(error)));
     } catch (error) {
       next(error);
     }

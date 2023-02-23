@@ -4,6 +4,7 @@ const { uploadToCloudinary, deleteImage } = require("../../middleware/upload");
 const { edit, getProfile } = require("../../model/seller/editProfie");
 const { response } = require("../../helper/common");
 const { extractPublicId } = require("../../helper/extracPublicId");
+const crypto = require("crypto");
 
 const sellerController = {
   update: async (req, res, next) => {
@@ -18,9 +19,11 @@ const sellerController = {
       }
 
       const locaFilePath = req.file?.path;
+      let originalname = req.file?.originalname;
+      originalname = crypto.randomBytes(5).toString("hex");
       let photos;
       if (locaFilePath) {
-        photos = await uploadToCloudinary(locaFilePath);
+        photos = await uploadToCloudinary(locaFilePath, originalname);
       }
 
       const data = {

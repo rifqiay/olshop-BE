@@ -3,6 +3,7 @@ const { uploadToCloudinary, deleteImage } = require("../../middleware/upload");
 const { edit, getProfile } = require("../../model/customer/editProfie");
 const { response } = require("../../helper/common");
 const { extractPublicId } = require("../../helper/extracPublicId");
+const crypto = require("crypto");
 
 const customerController = {
   update: async (req, res, next) => {
@@ -17,9 +18,11 @@ const customerController = {
       }
 
       const locaFilePath = req.file?.path;
+      let originalname = req.file?.originalname;
+      originalname = crypto.randomBytes(5).toString("hex");
       let result;
       if (locaFilePath) {
-        result = await uploadToCloudinary(locaFilePath);
+        result = await uploadToCloudinary(locaFilePath, originalname);
       }
 
       const data = {
