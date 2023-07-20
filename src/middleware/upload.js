@@ -3,9 +3,9 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const maxSize = 1024 * 1024;
 
-if (!fs.existsSync("./temp")) {
-  fs.mkdirSync("./temp");
-}
+// if (!fs.existsSync("./temp")) {
+//   fs.mkdirSync("./temp");
+// }
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -13,14 +13,14 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./temp");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./temp");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
 
 const uploadToCloudinary = async (locaFilePath, originalname) => {
   // locaFilePath: path of image which was just
@@ -36,7 +36,7 @@ const uploadToCloudinary = async (locaFilePath, originalname) => {
       // cloudinary So we dont need local image
       // file anymore
       // Remove file from local uploads folder
-      fs.unlinkSync(locaFilePath);
+      // fs.unlinkSync(locaFilePath);
 
       return {
         url: result.url,
@@ -45,13 +45,13 @@ const uploadToCloudinary = async (locaFilePath, originalname) => {
     })
     .catch((error) => {
       // Remove file from local uploads folder
-      fs.unlinkSync(locaFilePath);
+      // fs.unlinkSync(locaFilePath);
       return { message: "Fail" };
     });
 };
 
 const upload = multer({
-  storage: storage,
+  storage: uploadToCloudinary,
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype == "image/png" ||
