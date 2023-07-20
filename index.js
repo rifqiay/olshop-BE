@@ -6,7 +6,7 @@ const mainRoutes = require("./src/routes/index.routes");
 const port = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/temp"));
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 

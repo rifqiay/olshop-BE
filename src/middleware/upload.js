@@ -3,8 +3,8 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const maxSize = 1024 * 1024;
 
-if (!fs.existsSync("./uploads")) {
-  fs.mkdirSync("./uploads");
+if (!fs.existsSync("./temp")) {
+  fs.mkdirSync("./temp");
 }
 
 cloudinary.config({
@@ -15,7 +15,7 @@ cloudinary.config({
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads");
+    cb(null, "./temp");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
