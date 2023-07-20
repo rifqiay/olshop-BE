@@ -12,6 +12,13 @@ app.use(express.json());
 
 app.use("/api/v1", mainRoutes);
 
+app.get('/', (req,res) => {
+  res.status(200).json({
+    err: false,
+    message: "server running properly"
+  })
+})
+
 app.use((err, req, res, next) => {
   const message = err.message || "internal server error";
   const statusCode = err.status || 500;
